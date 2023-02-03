@@ -12,9 +12,7 @@ COPY package.json .
 
 RUN npm install && npm cache clean --force
 
-COPY . .
-
-RUN chown -R node:node .
+COPY --chown=node:node . .
 
 ENV PORT=8080 \
     MONGODBSERVERNAME=stocksdb \
