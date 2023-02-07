@@ -8,9 +8,11 @@ const Key = require('../models/ApiKey');
 
 const router = express.Router();
 
+const { protect } = require('../middleware/auth');
+
 const advancedResults = require('../middleware/advancedResults');
 
-router.route('/').get(advancedResults(Key), getKeys);
-router.route('/:name').put(updateKey);
+router.route('/').get(protect, advancedResults(Key), getKeys);
+router.route('/:name').put(protect, updateKey);
 
 module.exports  = router;
