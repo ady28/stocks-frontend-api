@@ -18,7 +18,7 @@ const { protect, authorize } = require('../middleware/auth');
 const advancedResults = require('../middleware/advancedResults');
 
 router.route('/').get(advancedResults(Stock), getStocks);
-router.route('/:ticker').get(getStock).delete(protect, authorize('user','admin'), deleteStock)
+router.route('/:ticker').get(getStock).delete(protect, authorize('admin'), deleteStock)
 router.route('/:ticker/getdata').get(getStockData)
 router.route('/:field/distinct').get(getDistinct)
 router.route('/:ticker/rename/:newticker').put(updateStockTicker)
