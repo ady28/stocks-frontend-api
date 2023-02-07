@@ -19,7 +19,7 @@ const advancedResults = require('../middleware/advancedResults');
 
 router.route('/').get(advancedResults(Stock), getStocks);
 router.route('/:ticker').get(getStock).delete(protect, authorize('admin'), deleteStock)
-router.route('/:ticker/getdata').get(getStockData)
+router.route('/:ticker/getdata').get(protect, getStockData)
 router.route('/:field/distinct').get(getDistinct)
 router.route('/:ticker/rename/:newticker').put(protect, authorize('admin'), updateStockTicker)
 router.route('/:ticker/removefindata/:type/:enddatey').put(protect, authorize('admin'), removeStockFinData)
