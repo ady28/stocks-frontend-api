@@ -11,6 +11,9 @@ pipeline {
         DOCKERHUB_USER = 'ady28'
         IMAGE_NAME = 'stocks-frontend-api'
         IMAGE_VERSION = ''
+        KUBERNETES_API = 'https://proxtest1:6443'
+        STOCKS_APP_NAMESPACE = 'stocks-app'
+        STOCKS_APP_DEPLOYMENT = 'stocks-app-apiclient'
     }
     stages {
         stage('Dockerfile check') {
@@ -40,6 +43,7 @@ pipeline {
         stage('Security analysis') {
             steps {
                 sh "trivy image ${env.DOCKERHUB_USER}/${env.IMAGE_NAME}:${IMAGE_VERSION} -f json -o trivycheck.json"
+                sh "npm audit --production --json > node_sec_analysis.json || true"
             }
         }
         stage('Tag Test Image'){
@@ -74,13 +78,16 @@ pipeline {
         }
         stage('Deploy Qual Infrastructure') {
             steps {
-                build job: 'stocks-app-qual-deploy'
+                echo "Restarting the deployment"
+                withKubeConfig([credentialsId: 'local_kube_stocksapp', serverUrl: "${env.KUBERNETES_API}", namespace: "${env.STOCKS_APP_NAMESPACE}"]) {
+                    sh "kubectl rollout restart deployment ${env.STOCKS_APP_DEPLOYMENT}"
+                }
             }
         }
     }
     post {
         always {
-            archiveArtifacts artifacts: 'sbom.json, dockerfile_lint.json, trivycheck.json', fingerprint: true
+            archiveArtifacts artifacts: 'sbom.json, dockerfile_lint.json, trivycheck.json, node_sec_analysis.json', fingerprint: true
         }
     }
 }

@@ -1,4 +1,4 @@
-FROM node:19.0.0-bullseye-slim
+FROM node:19.6.0-bullseye-slim
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends tini=0.19.0-1 \
