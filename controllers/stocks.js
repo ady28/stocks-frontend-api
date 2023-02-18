@@ -126,3 +126,13 @@ exports.removeStockFinData = asyncHandler(async (req, res, next) => {
     data: "Stock updated"
   });
 });
+
+// @desc      Get health
+// @route     GET /api/v1/stocks/health
+// @access    Public
+exports.getHealth = asyncHandler(async (req, res, next) => {
+  res.status(200).json({
+      success: true,
+      data: "OK"
+  });
+});
