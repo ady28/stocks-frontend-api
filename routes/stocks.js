@@ -7,7 +7,8 @@ const { getStocks,
         deleteStock,
         updateStockTicker,
         removeStockFinData,
-        getHealth
+        getHealth,
+        getStockExists
     } = require('../controllers/stocks');
 
 const Stock = require('../models/Stock');
@@ -25,5 +26,6 @@ router.route('/:ticker/getdata').get(protect, getStockData)
 router.route('/:field/distinct').get(getDistinct)
 router.route('/:ticker/rename/:newticker').put(protect, authorize('admin'), updateStockTicker)
 router.route('/:ticker/removefindata/:type/:enddatey').put(protect, authorize('admin'), removeStockFinData)
+router.route('/:ticker/exists').get(getStockExists)
 
 module.exports  = router;

@@ -26,6 +26,26 @@ exports.getStock = asyncHandler(async (req, res, next) => {
     });
 });
 
+// @desc      Get stock exists
+// @route     GET /api/v1/stocks/:ticker/exists
+// @access    Public
+exports.getStockExists = asyncHandler(async (req, res, next) => {
+  const stock = await Stock.findOne({"ticker" : req.params.ticker});
+
+  if (!stock) {
+    res.status(200).json({
+        success: true,
+        data: false
+    });
+  } else {
+    res.status(200).json({
+        success: true,
+        data: true
+    });
+  }
+
+});
+
 // @desc      Get a distinct field
 // @route     GET /api/v1/stocks/:field/distinct
 // @access    Public
